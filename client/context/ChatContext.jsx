@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import toast from "react-hot-toast";
+import { getApiErrorMessage } from "../src/lib/utils";
 
 
 export const ChatContext = createContext();
@@ -23,7 +24,7 @@ export const ChatProvider = ({ children })=>{
                 setUnseenMessages(data.unseenMessages)
             }
         } catch (error) {
-            toast.error(error.message)
+            toast.error(getApiErrorMessage(error))
         }
     }
 
@@ -35,7 +36,7 @@ export const ChatProvider = ({ children })=>{
                 setMessages(data.messages)
             }
         } catch (error) {
-            toast.error(error.message)
+            toast.error(getApiErrorMessage(error))
         }
     }
 
@@ -49,7 +50,7 @@ export const ChatProvider = ({ children })=>{
                 toast.error(data.message);
             }
         } catch (error) {
-            toast.error(error.message);
+            toast.error(getApiErrorMessage(error));
         }
     }
 

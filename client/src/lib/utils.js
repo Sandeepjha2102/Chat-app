@@ -5,3 +5,11 @@ export function formatMessageTime(date){
         hour12: false,
     })
 }
+
+export function getApiErrorMessage(error) {
+    if (!error?.response) {
+        return "Unable to connect to the server. Please try again later.";
+    }
+
+    return error.response.data?.message || error.message || "Something went wrong.";
+}

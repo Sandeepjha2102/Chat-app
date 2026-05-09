@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import axios from 'axios'
 import toast from "react-hot-toast";
 import { io } from "socket.io-client"
+import { getApiErrorMessage } from "../src/lib/utils";
 
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -25,7 +26,7 @@ export const AuthProvider = ({ children })=>{
                 connectSocket(data.user)
             }
         } catch (error) {
-            toast.error(error.message)
+            console.error("Auth check failed:", error)
         }
     }
 
@@ -45,7 +46,7 @@ const login = async (state, credentials)=>{
             toast.error(data.message)
         }
     } catch (error) {
-        toast.error(error.message)
+        toast.error(getApiErrorMessage(error))
     }
 }
 
@@ -58,7 +59,7 @@ const login = async (state, credentials)=>{
         setOnlineUsers([]);
         axios.defaults.headers.common["token"] = null;
         toast.success("Logged out successfully")
-        socket.disconnect();
+        socket?.disconnect();
     }
 
     // Update profile function to handle user profile updates
@@ -71,7 +72,7 @@ const login = async (state, credentials)=>{
                 toast.success("Profile updated successfully")
             }
         } catch (error) {
-            toast.error(error.message)
+            toast.error(getApiErrorMessage(error))
         }
     }
 
@@ -94,8 +95,8 @@ const login = async (state, credentials)=>{
     useEffect(()=>{
         if(token){
             axios.defaults.headers.common["token"] = token;
+            checkAuth();
         }
-        checkAuth();
     },[])
 
     const value = {
